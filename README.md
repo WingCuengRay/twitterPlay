@@ -4,15 +4,14 @@
 - Develop a reactive web Application to Search Relavent tweets by keyword
 
 ### Tool && Framework:
-
 - [Play Framework](https://www.playframework.com/)
 - Java 8
 - [Twitter API](https://developer.twitter.com)
 
 ### Project guidelines
-
 - Based on **Play FrameWork** 
 - Build and run through **sbt**
+  - [play framework start guideline](./sbtGuide.md)
 - Document all method (including private methods)
 - Controller Action must be **asynchronous** 
   - Using Java 8 :
