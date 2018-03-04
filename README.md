@@ -8,3 +8,18 @@
 - [Play Framework](https://www.playframework.com/)
 - Java 8
 - [Twitter API](https://developer.twitter.com)
+
+#### Project guidelines
+
+- Based on **Play FrameWork** 
+- Build and run through **sbt**
+- Document all method (including private methods)
+- Controller Action must be **asynchronous** 
+  - Using Java 8 :
+    - CompletionStage
+    - CompletableFutrue
+  - Not using :
+    - ~~get()~~
+    - ~~join()~~
+- Create JUnit
+
