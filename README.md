@@ -1,6 +1,6 @@
 ## Play Application - TweetAnalytics
 
-#### Project Object:
+#### Project Objectives:
 - Develop a reactive web Application to Search Relavent tweets by keyword
 
 #### Tool && Framework:
