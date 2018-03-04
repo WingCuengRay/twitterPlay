@@ -1,15 +1,15 @@
 ## Play Application - TweetAnalytics
 
-#### Project Objectives:
+### Project Objectives:
 - Develop a reactive web Application to Search Relavent tweets by keyword
 
-#### Tool && Framework:
+### Tool && Framework:
 
 - [Play Framework](https://www.playframework.com/)
 - Java 8
 - [Twitter API](https://developer.twitter.com)
 
-#### Project guidelines
+### Project guidelines
 
 - Based on **Play FrameWork** 
 - Build and run through **sbt**
@@ -23,5 +23,5 @@
     - ~~join()~~
 - Create JUnit
 
-#### Project Requirement link :
+### Project Requirement link :
 [project requirement1](./project-require1.pdf)
