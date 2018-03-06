@@ -24,3 +24,8 @@
 
 ## Project Requirement link :
 [project requirement1](./project-require1.pdf)
+
+## Environment Setup
+- [official guideline](https://www.jetbrains.com/help/idea/getting-started-with-play-2-x.html)
+- Download **Scala for IntelliJ plugin**
+
