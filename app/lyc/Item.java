@@ -35,6 +35,10 @@ public class Item {
         this.ref_user = ref_user;
     }
 
+    public UserBase getUser_profile() {
+        return user;
+    }
+
     private UserBase user;
     private String text;
     private String ref_user;

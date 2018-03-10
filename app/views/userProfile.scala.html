@@ -1,0 +1,45 @@
+@(user: lyc.UserBase, tweets: Seq[lyc.Item])
+
+
+@import helper._
+
+@main("User Profile") {
+
+<h2>@user.getUser_name()</h2>
+<table>
+    <tbody>
+    <tr>
+        <td>Id</td>
+        <td>@user.getUser_id()</td>
+    </tr>
+    <tr>
+        <td>Screen name</td>
+        <td>@user.getUser_screenName()</td>
+    </tr>
+    </tbody>
+</table>
+
+<h2>Homeline</h2>
+<table>
+    <thead>
+        <tr>
+            <td>Name</td>
+            <td>Text</td>
+        </tr>
+    </thead>
+    <tbody>
+    @for(w <- tweets) {
+        <tr>
+            <td>@w.getUser_name()</td>
+            <td>@w.getText()</td>
+            <!--
+            <td>
+                <a href="@routes.WidgetController.userProfile(w.getUser_id())">@w.getUser_link()</a>
+            </td>
+            -->
+        </tr>
+    }
+    </tbody>
+</table>
+
+}

@@ -1,14 +1,36 @@
-@(searchForm: Form[WidgetData])
+@(searchForm: Form[WidgetData], tweets: Seq[lyc.Item])
+
 
 @import helper._
 
 @main("Search Form") {
-<h1>Search form</h1>
-@helper.form(routes.InputController.search) {
-@helper.CSRF.formField
 
-@helper.inputText(searchForm("keyword"))
+    <h1>Search form</h1>
+    @helper.form(routes.WidgetController.search) {
+        @helper.CSRF.formField
 
-<button type="submit">Search</button>
-}
+        @helper.inputText(searchForm("keyword"))
+
+        <button type="submit">Search</button>
+    }
+
+
+    <table>
+        <thead>
+        <tr><th>Name</th>
+            <th>Tweet</th>
+            <th>Link</th>
+        </thead>
+        <tbody>
+        @for(w <- tweets) {
+        <tr>
+            <td>@w.getUser_name()</td>
+            <td>@w.getText()</td>
+            <td>
+                <a href="@routes.WidgetController.userProfile(w.getUser_id())">@w.getUser_link()</a>
+            </td>
+        </tr>
+        }
+        </tbody>
+    </table>
 }

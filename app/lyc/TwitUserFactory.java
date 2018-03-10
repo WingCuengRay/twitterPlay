@@ -2,13 +2,13 @@ package lyc;
 
 import java.util.HashMap;
 
-public class TwitUserFacotry {
-    private static TwitUserFacotry ourInstance = new TwitUserFacotry();
-    public static TwitUserFacotry getInstance() {
+public class TwitUserFactory {
+    private static TwitUserFactory ourInstance = new TwitUserFactory();
+    public static TwitUserFactory getInstance() {
         return ourInstance;
     }
 
-    private TwitUserFacotry() {
+    private TwitUserFactory() {
         cache = new HashMap<>();
     }
 
@@ -27,6 +27,12 @@ public class TwitUserFacotry {
 
         user = new TwitUserImpl(user_id, user_name, user_screenName);
         cache.put(user_id, user);
+
+        return user;
+    }
+
+    public UserBase getUserById(long user_id){
+        UserBase user = cache.get(user_id);
 
         return user;
     }
