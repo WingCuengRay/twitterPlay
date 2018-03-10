@@ -1,21 +1,14 @@
-@*
- * This template takes a single argument, a String containing a
- * message to display.
- *@
-@(message: String)
+@(searchForm: Form[WidgetData])
 
-@*
- * Call the `main` template with two arguments. The first
- * argument is a `String` with the title of the page, the second
- * argument is an `Html` object containing the body of the page.
- *@
-@main("Welcome to Play") {
+@import helper._
 
-    @*
-     * Get an `Html` object by calling the built-in Play welcome
-     * template and passing a `String` message.
-     *@
-    @search(message, style = "java")
+@main("Search Form") {
+<h1>Search form</h1>
+@helper.form(routes.InputController.search) {
+@helper.CSRF.formField
 
+@helper.inputText(searchForm("keyword"))
 
+<button type="submit">Search</button>
+}
 }
