@@ -1,7 +1,6 @@
 package lyc;
 
 public class Item {
-    public Item(){}
     public Item(UserBase user, String text){
         this.user = user;
         this.text = text;

@@ -22,6 +22,11 @@ public class WidgetController extends Controller {
     private CompletableFuture<List<Item>> tweets;
     private final Form<WidgetData> form;
 
+    /**
+     * Constructor of WidgetController, initializes all the member variables.
+     *
+     * @param formFactory
+     */
     @Inject
     public WidgetController(FormFactory formFactory) {
         this.form = formFactory.form(WidgetData.class);
@@ -37,11 +42,23 @@ public class WidgetController extends Controller {
         this.twitter = CompletableFuture.supplyAsync( () -> factory.createAccount(auths) );
     }
 
+    /**
+     * Reponse of 'Get /' request.
+     * This method will render the main page with search form and search results.
+     *
+     * @return the main page rendered by index.scala.html
+     */
     public Result index() {
         return ok(views.html.index.render(form, asScala(tweets.join())));
     }
 
 
+    /**
+     * Reponse of 'Post /search' request.
+     * This method will get the data of the input box and search tweets according to the keyword asynchronously
+     *
+     * @return the main page. In other word, it call the index() method agian.
+     */
     public Result search() {
         final Form<WidgetData> boundForm = form.bindFromRequest();
         WidgetData data = boundForm.get();
@@ -59,6 +76,12 @@ public class WidgetController extends Controller {
         return redirect(routes.WidgetController.index());
     }
 
+    /**
+     * Reponse of `Get /userProfile/:id' request. It will fetch the user's homeline and generate a user profile web page.
+     *
+     * @param user_id the uesr's id
+     * @return the user profile page rendered by userProfile.scala.html or error page if the id doesn't exist.
+     */
     public Result userProfile(long user_id){
         UserBase user = TwitUserFactory.getInstance().getUserById(user_id);
 
@@ -72,8 +95,4 @@ public class WidgetController extends Controller {
             return ok(views.html.error.render("User profile not found"));
     }
 
-    public CompletableFuture<Result> testReturn(){
-        return CompletableFuture.supplyAsync( () ->
-             ok(views.html.error.render("User profile not found")) );
-    }
 }

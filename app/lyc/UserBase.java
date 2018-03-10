@@ -9,7 +9,7 @@ public abstract class UserBase {
     protected String user_name;
     protected String user_screenName;
 
-    public UserBase(long user_id, String user_name, String user_screenName) {
+    protected UserBase(long user_id, String user_name, String user_screenName) {
         this.user_id = user_id;
         this.user_name = user_name;
         this.user_screenName = user_screenName;

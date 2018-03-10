@@ -13,7 +13,7 @@ public class TwitUserFactory {
     }
 
     /**
-     * Get a user from cache or create on if it doesn't exist.
+     * Get a user from cache or create it if it doesn't exist.
      *
      * @param user_id the user's id
      * @param user_name the user's name
@@ -31,6 +31,14 @@ public class TwitUserFactory {
         return user;
     }
 
+    /**
+     * Get the user information from cache by id.
+     *
+     * @param user_id
+     * @return an UserBase object or null if fail.
+     * @notice this method will only fetch the user locally.
+     *         If the user is not in cache, then it will return null
+     */
     public UserBase getUserById(long user_id){
         UserBase user = cache.get(user_id);
 
