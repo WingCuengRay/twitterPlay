@@ -5,12 +5,14 @@ import org.slf4j.LoggerFactory;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.*;
+import play.libs.concurrent.HttpExecutionContext;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 import static play.libs.Scala.asScala;
 import lyc.*;
@@ -22,14 +24,18 @@ public class WidgetController extends Controller {
     private CompletableFuture<List<Item>> tweets;
     private final Form<WidgetData> form;
 
+    private HttpExecutionContext httpExecutionContext;
+
     /**
      * Constructor of WidgetController, initializes all the member variables.
      *
      * @param formFactory
      */
     @Inject
-    public WidgetController(FormFactory formFactory) {
+    public WidgetController(FormFactory formFactory, HttpExecutionContext ec) {
         this.form = formFactory.form(WidgetData.class);
+        this.httpExecutionContext = ec;
+
         this.tweets = CompletableFuture.supplyAsync(() -> new ArrayList<Item>());  // initialize
 
         String []auths = new String[]{
@@ -46,10 +52,13 @@ public class WidgetController extends Controller {
      * Reponse of 'Get /' request.
      * This method will render the main page with search form and search results.
      *
-     * @return the main page rendered by index.scala.html
+     * @return a future object of the main page rendered by index.scala.html
      */
-    public Result index() {
-        return ok(views.html.index.render(form, asScala(tweets.join())));
+    public CompletionStage<Result> index() {
+        return tweets.thenApplyAsync(results -> 
+            ok(views.html.index.render(form, asScala(results))), httpExecutionContext.current()
+            );
+        //return ok(views.html.index.render(form, asScala(tweets.join())));
     }
 
 
@@ -57,9 +66,9 @@ public class WidgetController extends Controller {
      * Reponse of 'Post /search' request.
      * This method will get the data of the input box and search tweets according to the keyword asynchronously
      *
-     * @return the main page. In other word, it call the index() method agian.
+     * @return a future oject of the main page. In other word, it call the index() method agian.
      */
-    public Result search() {
+    public CompletionStage<Result> search() {
         final Form<WidgetData> boundForm = form.bindFromRequest();
         WidgetData data = boundForm.get();
 
@@ -73,26 +82,28 @@ public class WidgetController extends Controller {
         //logger.error(String.valueOf(twitter==null));
         //flash("info", "Widget Search!");
 
-        return redirect(routes.WidgetController.index());
+        return CompletableFuture.completedFuture(redirect(routes.WidgetController.index()));
     }
 
     /**
      * Reponse of `Get /userProfile/:id' request. It will fetch the user's homeline and generate a user profile web page.
      *
      * @param user_id the uesr's id
-     * @return the user profile page rendered by userProfile.scala.html or error page if the id doesn't exist.
+     * @return a future object of the user profile page rendered by userProfile.scala.html or error page if the id doesn't exist.
      */
-    public Result userProfile(long user_id){
+    public CompletionStage<Result> userProfile(long user_id){
         UserBase user = TwitUserFactory.getInstance().getUserById(user_id);
 
-        CompletableFuture<List<Item>> results = twitter.thenApply(
+        CompletableFuture<List<Item>> f_results = twitter.thenApply(
                 (Connection conn) -> conn.getHomeLineById(user_id)
         );
 
         if(user!=null)
-            return ok(views.html.userProfile.render(user, asScala(results.join())));
+            return f_results.thenApplyAsync( results -> 
+                ok(views.html.userProfile.render(user, asScala(results))), httpExecutionContext.current()
+                );
         else
-            return ok(views.html.error.render("User profile not found"));
+            return CompletableFuture.completedFuture( ok(views.html.error.render("User profile not found")) );
     }
 
 }
